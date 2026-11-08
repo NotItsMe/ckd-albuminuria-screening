@@ -1,16 +1,15 @@
 import pandas as pd,numpy as np,json,warnings,sys;warnings.filterwarnings("ignore")
-sys.path.insert(0,"/home/claude/re")
-exec(open("/home/claude/re/build_raw.py").read().split("def train_raw")[0])
+exec(open("build_raw.py").read().split("def train_raw")[0])
 from build_features import train_X
 import lightgbm as lgb
-D="/mnt/user-data/uploads/Downloads"
+D=DN
 f={n:f"{D}/{n}_F.xpt" for n in names}; f["BPX"]=f"{D}/BPX_F.xpt"
 a=build(f,"WTMEC2YR",1,"2009").reset_index(drop=True)
 a["RIDRETH3"]=a.RIDRETH1.replace({5:7})
 X=train_X(a,3)
 FULL=["age","female","mexam","othhisp","black","asian","other","sbp","dbp","htn_dx","bmi","hba1c","hdl","uric","smoker","cvd","waist","glucose","trig","chol","alt","pulse","chol_dx"]
 NORACE=[c for c in FULL if c not in ["mexam","othhisp","black","asian","other"]]
-bst=lgb.Booster(model_file="/home/claude/re/model_main_racefree.txt")
+bst=lgb.Booster(model_file="../model/model_main_racefree.txt")  # the frozen published model
 assert bst.feature_name()==NORACE, bst.feature_name()
 p=bst.predict(X[NORACE]); y=a.y.values; w=a.w.values; h=X.htn_dx.values
 # Bragg-Gresham M1
@@ -46,7 +45,7 @@ m=has2; ww=w*m; pct=(ww*h).sum()/ww.sum(); s=topk(np.where(m,p,-1),ww,pct)
 O["persist"]=dict(n_with2=int(m.sum()),cases_first_among2=int((y*m).sum()),persistent_cases=int(pers[m].sum()),
   confirm_rate=round(float((ww*pers).sum()/(ww*y).sum()),4),model=round(float(cap(ww,pers,s)),4),rule=round(float(cap(ww,pers,h*m)),4))
 O["missing"]={c:int(X[c].isna().sum()) for c in NORACE if X[c].isna().sum()>0}
-json.dump(O,open("/home/claude/re/f/res_2009.json","w"),indent=1); print(json.dumps(O,indent=1))
+json.dump(O,open("res_2009.json","w"),indent=1); print(json.dumps(O,indent=1))
 # CI for persistent comparison
 def runp(wb):
     ww=wb*m; pct=(ww*h).sum()/ww.sum(); s=topk(np.where(m,p,-1),ww,pct); return cap(ww,pers,s)-cap(ww,pers,h*m), cap(ww,pers,s), cap(ww,pers,h*m)
@@ -60,4 +59,4 @@ for b in range(2000):
     vals.append(runp(w*np.array([mult[k] for k in key])))
 v=np.array(vals); O["persist"]["diff_ci"]=[round(float(x),4) for x in np.percentile(v[:,0],[2.5,97.5])]; O["persist"]["model_ci"]=[round(float(x),4) for x in np.percentile(v[:,1],[2.5,97.5])]; O["persist"]["rule_ci"]=[round(float(x),4) for x in np.percentile(v[:,2],[2.5,97.5])]
 O["persist"]["share_tested"]=round(float((w*m*h).sum()/(w*m).sum()),4)
-json.dump(O,open("/home/claude/re/f/res_2009.json","w"),indent=1); print(O["persist"])
+json.dump(O,open("res_2009.json","w"),indent=1); print(O["persist"])

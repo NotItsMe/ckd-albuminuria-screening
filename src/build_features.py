@@ -16,11 +16,6 @@ def train_X(a, n_readings=3):
     X["y"]=a.y.values; X["w"]=a.w.values; X["cycle"]=a.cycle.astype(int).values; X["sdmvpsu"]=a.SDMVPSU.values; X["sdmvstra"]=a.SDMVSTRA.values
     return X
 if __name__=="__main__":
-    raw=pd.read_pickle("train_raw.pkl"); m=pd.read_csv("train_matrix.csv")
-    old=train_X(raw,None)
-    for c in m.columns:
-        a,b=old[c].fillna(-999).values.astype(float),m[c].fillna(-999).values.astype(float)
-        d=~np.isclose(a,b); 
-        if d.sum(): print("diff vs original matrix",c,d.sum())
+    raw=pd.read_pickle("train_raw.pkl")
     new=train_X(raw,3); new.to_csv("train_matrix_v2.csv",index=False)
-    print("sbp changed rows:",(~np.isclose(new.sbp.fillna(-1),old.sbp.fillna(-1))).sum())
+    print("training matrix:",new.shape)

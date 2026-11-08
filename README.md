@@ -13,15 +13,36 @@ The model ranks U.S. adults without diabetes and with eGFR ≥ 60 by their chanc
 - **NHANES 2009–2010** (`src/score_2009.py` → `results/res_2009.json`; plan in `PLAN_2009.md`): a one-time, pre-specified check on a cycle never used in development. At the same testing volume, the model found 45.9% of single-sample albuminuria vs 36.1% for the high blood pressure rule (AUC 0.706). For albuminuria confirmed on a second sample, it did about the same as the rule.
 
 ## Data
-All data are public, de-identified NHANES files from the CDC (not included here). Download the XPT files for cycles G (2011–12), H (2013–14), I (2015–16), P (2017–Mar 2020) and L (Aug 2021–Aug 2023): DEMO, ALB_CR, BIOPRO, GHB, DIQ, BPQ, MCQ, SMQ, HDL, BMX, BPX/BPXO, RXQ_RX, HUQ_L. Set the folders at the top of `src/build_raw.py`.
+All data are public, de-identified NHANES files from the CDC (not included here). Put these .xpt files in one folder (`data/` at the top of the repo, or any folder named by the `NHANES_DIR` environment variable), keeping the CDC file names:
 
-## Run order
-0. `src/part_a.py` then `src/part_d_muntner.py` — build the 2021–2023 test cohort (`cohort_2021_2023.csv`) with Bragg-Gresham Model 1 and Muntner scores.
-1. `src/build_raw.py` — builds the study groups (adults ≥ 18, examined, no diabetes, CKD-EPI 2021 eGFR ≥ 60).
-2. `src/build_features.py` — training matrix (blood pressure = mean of first three readings; pulse = first available reading).
-3. `src/analysis.py` — fits the final model, comparators and sensitivity versions; cross-validation and time check.
-4. `src/metrics.py`, `src/extra.py`, `src/extra2.py` — survey-weighted results with Rao–Wu bootstrap (2,000 replicates), bedside table, calibration, decision curves, equity check, SHAP.
-5. `src/figs.py` — figures. `src/model_search_v2.py` — training-only model search.
+| Cycle | Files |
+| --- | --- |
+| 2011–12 (G), 2013–14 (H), 2015–16 (I) | DEMO, ALB_CR, BIOPRO, GHB, DIQ, BPQ, MCQ, SMQ, HDL, BMX, BPX, RXQ_RX (e.g. `DEMO_G.xpt`) |
+| 2017–Mar 2020 (P) | the same files with the `P_` prefix and BPXO instead of BPX (e.g. `P_DEMO.xpt`, `P_BPXO.xpt`) |
+| Aug 2021–Aug 2023 (L) | DEMO, ALB_CR, BIOPRO, GHB, DIQ, BPQ, MCQ, SMQ, HDL, BMX, BPXO, HUQ (e.g. `DEMO_L.xpt`) |
+| 2009–10 (F), used once for the final check | DEMO, ALB_CR, BIOPRO, GHB, DIQ, BPQ, MCQ, SMQ, HDL, BMX, BPX |
+
+## How to run
+```
+pip install -r requirements.txt
+NHANES_DIR=/path/to/xpt/files bash run_all.sh
+```
+`run_all.sh` runs every script in order from inside `src/` (about 15–20 minutes, most of it bootstrap). Each script writes its `res_*.json` next to it; these match the files in `results/` exactly. A clean run from the raw CDC files was checked against `results/` on 8 November 2026.
+
+| Step | Script | What it does |
+| --- | --- | --- |
+| 1 | `part_a.py` | Builds the 2021–2023 test cohort and scores Bragg-Gresham Model 1 |
+| 2 | `build_raw.py` | Builds the 2011–Mar 2020 training adults (18+, examined, no diabetes, CKD-EPI 2021 eGFR ≥ 60) |
+| 3 | `build_features.py` | Makes the 18 inputs (blood pressure = mean of first three readings; pulse = first reading) |
+| 4 | `part_d_muntner.py` | Adds the Muntner score |
+| 5 | `analysis.py` | Fits the final model, comparators and sensitivity versions; cross-validation and time check |
+| 6 | `metrics.py` | Main results with Rao–Wu bootstrap 95% CIs (2,000 replicates) |
+| 7 | `extra.py`, `extra2.py` | Bedside table, equity, calibration, decision curves, SHAP, severe albuminuria |
+| 8 | `round4.py` | Later robustness checks |
+| 9 | `score_2009.py` | One-time check of the frozen model on 2009–2010 |
+| 10 | `figs.py` | Figures |
+
+`model_search_v2.py` (run separately: `python model_search_v2.py train_matrix_v2.csv out.json`, several hours) is the training-only model search. `results/earlier_candidates_test_scores.csv` holds test-set scores from earlier development versions, kept because the paper reports them.
 
 `results/` holds the outputs used in the paper. `model/model_main_racefree.txt` is the fitted LightGBM model.
 

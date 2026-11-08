@@ -9,6 +9,7 @@ t=pd.read_pickle("test_scored.pkl"); y,w=t.y.values,t.w.values
 R=json.load(open("res_metrics.json")); X=json.load(open("res_extra.json"))
 def curve(p):
     o=np.argsort(-p,kind="stable"); cw=np.cumsum(w[o])/w.sum(); cy=np.cumsum((w*y)[o])/(w*y).sum(); return np.r_[0,cw]*100,np.r_[0,cy]*100
+import os; os.makedirs("figs2",exist_ok=True)
 def save(f,name): f.tight_layout(); f.savefig(f"figs2/{name}.png",dpi=200); plt.close(f)
 pct=R["point"]["pct"]*100; htn=R["point"]["htn"]*100
 # Fig 1 flow

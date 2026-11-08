@@ -14,3 +14,10 @@ __pycache__/
 .env
 .env.*
 .DS_Store
+
+data/
+src/*.pkl
+src/*.csv
+src/res_*.json
+src/figs2/
+src/model_main_racefree.txt

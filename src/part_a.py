@@ -1,13 +1,12 @@
 """Part A: test existing albuminuria scores vs. testing rules on NHANES Aug 2021-Aug 2023.
 Cohort: adults 18+, examined, no diabetes (self-report or HbA1c>=6.5), eGFR>=60 (CKD-EPI 2021).
 Outcome: UACR >= 30 mg/g. Scores: Bragg-Gresham 2024 Models 1 & 2 (coefficients from their Appendix 1 calculator)."""
-import pandas as pd, numpy as np, sys, json
-D = sys.argv[1]
+import pandas as pd, numpy as np, sys, os, json
+D = sys.argv[1] if len(sys.argv)>1 else os.environ.get("NHANES_DIR", "../data")
 r = lambda f: pd.read_sas(f"{D}/{f}.xpt", format="xport")
 d = r("DEMO_L")
 for f in ["ALB_CR_L","BIOPRO_L","GHB_L","DIQ_L","BPXO_L","BPQ_L","HDL_L","BMX_L","MCQ_L","SMQ_L"]:
     d = d.merge(r(f), on="SEQN", how="left", suffixes=("", "_"+f))
-rx = r("RXQ_RX_L")
 a = d[(d.RIDAGEYR>=18)&(d.RIDSTATR==2)].dropna(subset=["URXUMA","URXUCR","LBXSCR","LBXGH"]).copy()
 a["UACR"] = 100*a.URXUMA/a.URXUCR
 fem = a.RIAGENDR==2; k=np.where(fem,.7,.9); al=np.where(fem,-.241,-.302); s=a.LBXSCR/k
@@ -36,6 +35,6 @@ M1=dict(i=-3.3723,age_lt25=.522,age_65_74=.2415,age_75=.9294,male=-.3873,black=.
 M2=dict(i=-3.4053,age_lt25=.4956,age_65_74=.2585,age_75=.7934,male=-.3716,black=.2299,mex=.5195,othhisp=-.1417,othnh=.4161,smoker=.254,prediab=.1582,htn=1.4748,cvd=.2751,hi_ua=.3607,lo_hdl=.2314,obese=.000867,acei=-.3529,arb=-.4389,statin=-.313)
 def score(m): return 1/(1+np.exp(-(m["i"]+sum(a[k]*v for k,v in m.items() if k!="i"))))
 a["p_m1"]=score(M1); a["p_m2"]=score(M2)
-a.to_csv(f"{D}/../BigBrain/Projects/CKD Early Detection/analysis/cohort_2021_2023.csv", index=False)
+a.to_csv("cohort_2021_2023.csv", index=False)
 print("n",len(a),"cases",a.y.sum(),"| missing hi_ua",a.LBXSUA.isna().sum(),"lo_hdl",a.LBDHDD.isna().sum(),"smoke",a.SMQ040.isna().sum())
 print("htn", a.htn.sum(), "cvd", a.cvd.sum())

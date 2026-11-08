@@ -1,5 +1,6 @@
-import pandas as pd, numpy as np, warnings; warnings.filterwarnings("ignore")
-DN="/mnt/user-data/uploads/Downloads/nhanes"; DL="/mnt/user-data/uploads/Downloads"
+import pandas as pd, numpy as np, os, warnings; warnings.filterwarnings("ignore")
+# Folder holding all NHANES .xpt files (set NHANES_DIR, or put them in ../data)
+DN=DL=os.environ.get("NHANES_DIR",os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data"))
 rd=lambda p: pd.read_sas(p,format="xport")
 def build(files,wcol,wfactor,cycle,egfr_min=60):
     d=rd(files["DEMO"])
@@ -27,5 +28,4 @@ def test_raw(egfr_min=60):
 if __name__=="__main__":
     tr=train_raw(); tr.to_pickle("train_raw.pkl")
     te0=test_raw(0); te0.to_pickle("test_all_egfr.pkl")
-    m=pd.read_csv("train_matrix.csv")
-    print(len(tr),len(m), np.allclose(tr.w.values,m.w.values), (tr.y.values==m.y.values).all(), len(te0), (te0.eGFR<60).sum())
+    print("training adults:",len(tr),"cases:",int(tr.y.sum()),"| 2021-23 adults (any eGFR):",len(te0))

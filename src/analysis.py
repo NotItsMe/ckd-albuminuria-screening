@@ -1,9 +1,10 @@
-exec(open("core.py").read())
+exec(open("core.py").read()); import os
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import roc_auc_score
 raw=pd.read_pickle("train_raw.pkl"); assert len(raw)==len(tr)
 tr["SEQN"]=raw.SEQN.values; tr["preg"]=(raw.RIDEXPRG==1).values*1; tr["RIDRETH3"]=raw.RIDRETH3.values
 NORACE=[f for f in FULL if f not in RACE]
+DN=os.environ.get("NHANES_DIR","../data")
 SETS={"gb_full":FULL,"gb_norace":NORACE,"gb_norace_nouric":[f for f in NORACE if f!="uric"],
       "gb_ehr":[f for f in NORACE if f not in("uric","waist")],"gb_norace_nobp":[f for f in NORACE if f not in("sbp","dbp")]}
 R={}
@@ -37,7 +38,7 @@ for k in ["p_muntner","p_gb","p_gb2"]: te[k]=ts.loc[te.SEQN,k].values
 # RAS blocker sensitivity on training
 rx=[]
 for f in ["RXQ_RX_G","RXQ_RX_H","RXQ_RX_I","P_RXQ_RX"]:
-    r=pd.read_sas(f"/mnt/user-data/uploads/Downloads/nhanes/{f}.xpt",format="xport",encoding="latin1")[["SEQN","RXDDRUG"]]; rx.append(r)
+    r=pd.read_sas(f"{DN}/{f}.xpt",format="xport",encoding="latin1")[["SEQN","RXDDRUG"]]; rx.append(r)
 rx=pd.concat(rx); dn=rx.RXDDRUG.fillna("").str.upper()
 ras_words=["PRIL","SARTAN"]; ras=rx[dn.str.contains("|".join(ras_words))].SEQN.unique()
 tr["ras"]=tr.SEQN.isin(ras)*1
