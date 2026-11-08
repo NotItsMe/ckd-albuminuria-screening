@@ -1,0 +1,16 @@
+# NHANES raw data and derived per-person files
+*.xpt
+*.XPT
+*.pkl
+cohort_*.csv
+train_matrix*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# local
+.env
+.env.*
+.DS_Store

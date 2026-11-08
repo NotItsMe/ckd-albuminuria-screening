@@ -1,0 +1,129 @@
+{
+ "n_uacr200_unw": 35,
+ "uacr200_capture": {
+  "model": 0.3099,
+  "htn": 0.388,
+  "diff": -0.0781,
+  "diff_ci": [
+   -0.2578,
+   0.2058
+  ]
+ },
+ "bg_all_egfr": {
+  "n": 4664,
+  "cases": 369,
+  "prev": 0.0663,
+  "auc": 0.6773,
+  "htn_pct": 0.2483,
+  "bg_capture": 0.4818,
+  "htn_capture": 0.4629,
+  "capture_at_37.7": 0.6152
+ },
+ "prev_by_cycle_sex": [
+  {
+   "cycle": 2011,
+   "female": 0,
+   "prev": 0.0519,
+   "n": 2028,
+   "preg": 0
+  },
+  {
+   "cycle": 2011,
+   "female": 1,
+   "prev": 0.0788,
+   "n": 2083,
+   "preg": 48
+  },
+  {
+   "cycle": 2013,
+   "female": 0,
+   "prev": 0.0483,
+   "n": 2130,
+   "preg": 0
+  },
+  {
+   "cycle": 2013,
+   "female": 1,
+   "prev": 0.091,
+   "n": 2365,
+   "preg": 57
+  },
+  {
+   "cycle": 2015,
+   "female": 0,
+   "prev": 0.062,
+   "n": 2002,
+   "preg": 0
+  },
+  {
+   "cycle": 2015,
+   "female": 1,
+   "prev": 0.0832,
+   "n": 2201,
+   "preg": 58
+  },
+  {
+   "cycle": 2017,
+   "female": 0,
+   "prev": 0.0431,
+   "n": 2985,
+   "preg": 0
+  },
+  {
+   "cycle": 2017,
+   "female": 1,
+   "prev": 0.0801,
+   "n": 3296,
+   "preg": 73
+  },
+  {
+   "cycle": 2021,
+   "female": 0,
+   "prev": 0.052,
+   "n": 1943,
+   "preg": 0
+  },
+  {
+   "cycle": 2021,
+   "female": 1,
+   "prev": 0.0626,
+   "n": 2434,
+   "preg": 36
+  }
+ ],
+ "trend_women": {
+  "train": 0.0829,
+  "test": 0.0626,
+  "diff_ci": [
+   -0.0394,
+   -0.002
+  ]
+ },
+ "trend_men": {
+  "train": 0.0502,
+  "test": 0.052,
+  "diff_ci": [
+   -0.0087,
+   0.0125
+  ]
+ },
+ "preg_train_n": 236,
+ "women_nonpreg_prev": {
+  "2011": 0.0772,
+  "2013": 0.0909,
+  "2015": 0.0847,
+  "2017": 0.0814,
+  "2021": 0.0625
+ },
+ "final_all_egfr": {
+  "n": 4664,
+  "auc": 0.7358,
+  "model": 0.5568,
+  "htn": 0.4629,
+  "pct": 0.2483
+ },
+ "egfr_lt60": {
+  "n": 287,
+  "cases": 67
+ }
+}

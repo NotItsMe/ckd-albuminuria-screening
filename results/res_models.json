@@ -1,0 +1,26 @@
+{
+ "cv_auc": {
+  "gb_full": 0.6841,
+  "gb_norace": 0.6845,
+  "gb_norace_nouric": 0.6803,
+  "gb_ehr": 0.6798,
+  "gb_norace_nobp": 0.6681,
+  "lr_norace": 0.6715,
+  "lr_simple5": 0.658
+ },
+ "cv_auc_weighted": {
+  "gb_full": 0.6721,
+  "gb_norace": 0.6719,
+  "gb_norace_nouric": 0.6686,
+  "gb_ehr": 0.6647,
+  "gb_norace_nobp": 0.6673,
+  "lr_norace": 0.656,
+  "lr_simple5": 0.6431
+ },
+ "temporal_auc_weighted": {
+  "gb_norace": 0.6693,
+  "gb_full": 0.6656
+ },
+ "ras_share_train": 0.1198,
+ "ras_share_train_htn": 0.4461
+}
