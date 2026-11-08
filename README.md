@@ -11,6 +11,7 @@ The model ranks U.S. adults without diabetes and with eGFR ≥ 60 by their chanc
 ## Later checks
 - **Round 4 robustness checks** (`src/round4.py` → `results/res_round4.json`): model vs blood-pressure ranking among people without a hypertension diagnosis, a version with some labs masked, calibration by sex, equity confidence intervals and net benefit.
 - **NHANES 2009–2010** (`src/score_2009.py` → `results/res_2009.json`; plan in `PLAN_2009.md`): a one-time, pre-specified check on a cycle never used in development. At the same testing volume, the model found 45.9% of single-sample albuminuria vs 36.1% for the high blood pressure rule (AUC 0.706). For albuminuria confirmed on a second sample, it did about the same as the rule.
+- **Round 5** (`src/round5.py` → `results/res_round5.json`, exploratory, run after the main results): a 16-input model without waist size and uric acid, saved as `model/model_ehr_16inputs.txt` (51.5% found, AUC 0.707 on 2021–2023); ranking men and women separately at the rule's testing rate for each sex (57.2% found on 2021–2023, 46.0% on 2009–2010); and the 92 persistent 2009–2010 cases rescored without pulse, with the 16-input model and with the sex-matched list (none differed clearly from the rule).
 
 ## Data
 All data are public, de-identified NHANES files from the CDC (not included here). Put these .xpt files in one folder (`data/` at the top of the repo, or any folder named by the `NHANES_DIR` environment variable), keeping the CDC file names:
@@ -40,11 +41,12 @@ NHANES_DIR=/path/to/xpt/files bash run_all.sh
 | 7 | `extra.py`, `extra2.py` | Bedside table, equity, calibration, decision curves, SHAP, severe albuminuria |
 | 8 | `round4.py` | Later robustness checks |
 | 9 | `score_2009.py` | One-time check of the frozen model on 2009–2010 |
-| 10 | `figs.py` | Figures |
+| 10 | `round5.py` | 16-input model file, sex-matched testing, persistent-case checks |
+| 11 | `figs.py` | Figures |
 
 `model_search_v2.py` (run separately: `python model_search_v2.py train_matrix_v2.csv out.json`, several hours) is the training-only model search. `results/earlier_candidates_test_scores.csv` holds test-set scores from earlier development versions, kept because the paper reports them.
 
-`results/` holds the outputs used in the paper. `model/model_main_racefree.txt` is the fitted LightGBM model.
+`results/` holds the outputs used in the paper. `model/model_main_racefree.txt` is the fitted LightGBM model; `model/model_ehr_16inputs.txt` is the 16-input version without waist size and uric acid.
 
 ## Not for clinical use
 This is a research model built on survey data. It does not diagnose anyone and has not been tested on hospital records.

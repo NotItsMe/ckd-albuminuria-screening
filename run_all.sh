@@ -14,5 +14,6 @@ python extra.py             # bedside table, equity, calibration, decision curve
 python extra2.py            # severe albuminuria, Bragg-Gresham on its own population, trends
 python round4.py            # later robustness checks
 python score_2009.py        # one-time check on NHANES 2009-2010 with the frozen model
+python round5.py           # 16-input model, sex-matched testing, persistent-case checks (exploratory)
 python figs.py              # figures into src/figs2/
 echo "Done. Compare src/res_*.json with results/."

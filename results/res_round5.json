@@ -1,0 +1,129 @@
+{
+ "ehr_model": {
+  "inputs": [
+   "age",
+   "female",
+   "sbp",
+   "dbp",
+   "htn_dx",
+   "bmi",
+   "hba1c",
+   "hdl",
+   "smoker",
+   "cvd",
+   "glucose",
+   "trig",
+   "chol",
+   "alt",
+   "pulse",
+   "chol_dx"
+  ],
+  "auc": 0.7069,
+  "found": 0.5151
+ },
+ "sex_matched": {
+  "model": {
+   "found": 0.5723,
+   "women": 0.4846,
+   "men": 0.6862,
+   "sel_w": 0.2261,
+   "sel_m": 0.2367,
+   "vol": 0.2312
+  },
+  "rule": {
+   "found": 0.403,
+   "women": 0.3707,
+   "men": 0.4449,
+   "sel_w": 0.2262,
+   "sel_m": 0.2369,
+   "vol": 0.2313
+  },
+  "pooled_model": {
+   "found": 0.5292,
+   "women": 0.5481,
+   "men": 0.5046,
+   "sel_w": 0.317,
+   "sel_m": 0.1389,
+   "vol": 0.2313
+  },
+  "gain": 0.1693,
+  "gain_ci": [
+   0.0963,
+   0.2406
+  ],
+  "gain_men": 0.2413,
+  "gain_men_ci": [
+   0.1401,
+   0.3292
+  ],
+  "gain_women": 0.1139,
+  "gain_women_ci": [
+   0.0357,
+   0.2017
+  ]
+ },
+ "persist_2009": {
+  "main (18 inputs)": {
+   "persistent_model": 0.5439,
+   "persistent_rule": 0.5309,
+   "diff": 0.013,
+   "diff_ci": [
+    -0.1774,
+    0.1638
+   ],
+   "single_model": 0.4587,
+   "single_rule": 0.3608,
+   "single_diff_ci": [
+    0.0191,
+    0.1701
+   ],
+   "n_persistent": 92
+  },
+  "no pulse (17 inputs)": {
+   "persistent_model": 0.5314,
+   "persistent_rule": 0.5309,
+   "diff": 0.0005,
+   "diff_ci": [
+    -0.1916,
+    0.1593
+   ],
+   "single_model": 0.4681,
+   "single_rule": 0.3608,
+   "single_diff_ci": [
+    0.0461,
+    0.17
+   ],
+   "n_persistent": 92
+  },
+  "EHR (16 inputs)": {
+   "persistent_model": 0.5218,
+   "persistent_rule": 0.5309,
+   "diff": -0.009,
+   "diff_ci": [
+    -0.1933,
+    0.14
+   ],
+   "single_model": 0.4461,
+   "single_rule": 0.3608,
+   "single_diff_ci": [
+    0.0053,
+    0.1628
+   ],
+   "n_persistent": 92
+  }
+ },
+ "sex_matched_2009": {
+  "single_model": 0.4597,
+  "single_rule": 0.3608,
+  "single_diff_ci": [
+   0.0109,
+   0.1692
+  ],
+  "persistent_model": 0.5733,
+  "persistent_rule": 0.5309,
+  "persistent_diff_ci": [
+   -0.1264,
+   0.1703
+  ]
+ }
+}
