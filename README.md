@@ -8,9 +8,9 @@ The model ranks U.S. adults without diabetes and with eGFR ≥ 60 by their chanc
 
 **Main result (Aug 2021–Aug 2023 test data):** 52.9% of single-sample albuminuria found vs 40.3% for the high blood pressure rule when both test 23.1% of adults (gain 12.6 points, 95% CI 4.4–20.5); AUC 0.726 (0.692–0.760). The model has not been validated on clinical records.
 
-## Results
-- **Round 4 checks:** extra analyses requested by reviewers are in `src/round4.py`, with outputs in `results/res_round4.json`.
-- **One-time check on NHANES 2009–2010:** the analysis plan (`PLAN_2009.md`) was written before any scoring, and the frozen model was scored once (`src/score_2009.py`, `results/res_2009.json`). This cycle was not used in development. With both testing 22.5% of adults, the model found 45.9% of single-sample albuminuria vs 36.1% for the high blood pressure rule (gain 9.8 points, 95% CI 1.9–17.2). For albuminuria confirmed on a second sample, the model did about the same as the rule: 54.4% vs 53.1% (difference 95% CI −17.6 to 16.5; only 92 confirmed cases).
+## Later checks
+- **Round 4 robustness checks** (`src/round4.py` → `results/res_round4.json`): model vs blood-pressure ranking among people without a hypertension diagnosis, a version with some labs masked, calibration by sex, equity confidence intervals and net benefit.
+- **NHANES 2009–2010** (`src/score_2009.py` → `results/res_2009.json`; plan in `PLAN_2009.md`): a one-time, pre-specified check on a cycle never used in development. At the same testing volume, the model found 45.9% of single-sample albuminuria vs 36.1% for the high blood pressure rule (AUC 0.706). For albuminuria confirmed on a second sample, it did about the same as the rule.
 
 ## Data
 All data are public, de-identified NHANES files from the CDC (not included here). Download the XPT files for cycles G (2011–12), H (2013–14), I (2015–16), P (2017–Mar 2020) and L (Aug 2021–Aug 2023): DEMO, ALB_CR, BIOPRO, GHB, DIQ, BPQ, MCQ, SMQ, HDL, BMX, BPX/BPXO, RXQ_RX, HUQ_L. Set the folders at the top of `src/build_raw.py`.
