@@ -1,9 +1,3 @@
----
-permalink: bigbrain/projects/ckd-early-detection/repo/readme
-title: README
-type: note
----
-
 # Choosing who gets a urine albumin test (NHANES 2011–2023)
 
 **Research use only, not for clinical use.**
