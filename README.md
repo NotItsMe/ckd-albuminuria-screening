@@ -1,12 +1,17 @@
 # Choosing who gets a urine albumin test (NHANES 2011–2023)
 
-**Research use only, not for clinical use.**
+**This is a research project and not intended for a diagnosis or for use in a clinic.**
 
 Code for the paper *The Urine Test Nobody Orders: Using common clinical measurements to decide who gets a urine albumin test* (Zaid Mohammed, November 2026).
 
-The model ranks U.S. adults without diabetes and with eGFR ≥ 60 by their chance of a urine albumin-to-creatinine ratio (UACR) ≥ 30 mg/g on a single sample, using 18 routine inputs (no kidney-damage markers, no race). It is compared with testing everyone with diagnosed high blood pressure, Bragg-Gresham Model 1 and the Muntner score at the same testing volume.
+Most chronic kidney disease is picked up at stage 3. By then, a significant amount of kidney function has already been lost. Around 9 of 10 people living in the US with kidney disease don't realize they have it. Kidney disease in the early stages (1 and 2) can be caught with a cheap urine test called UACR, which looks for protein leaking into the urine. The issue is that this test is not used often unless a patient has diabetes or high blood pressure. So I wanted to answer a simple question: for a clinic that has limited capacity to perform the UACR test, which patients should get tested? 
 
-**Main result (Aug 2021–Aug 2023 test data):** 52.9% of single-sample albuminuria found vs 40.3% for the high blood pressure rule when both test 23.1% of adults (gain 12.6 points, 95% CI 4.4–20.5); AUC 0.726 (0.692–0.760). The model has not been validated on clinical records.
+The goal of this model was to answer this question. It takes data which would normally be measured in a regular check up such as age, sex, blood pressure, BMI, HbA1c, cholesterol, and a handful of other lab inputs (18 total). It then ranks patients according to how likely they are to have protein leaking in their urine. It doesn't use any kidney test results, since the whole point is to find people who haven't been tested yet. I trained the model on data from the CDC national survey (NHANES) from 2011-2020, and tested it on newer data from 2021 to 2023 that it was never trained on.
+
+What I observed: today's rule is effectively "test the people with diagnosed high blood pressure." When both my model and the rule tested the same 23.1% of adults, today's rule detects 40.3% of people with protein in their urine, whereas my model detects 52.9% of the people who have protein. That is about 31% more cases with the same number of tests (95% CI for the difference: 4.4 to 20.5 points; AUC 0.726). When I tested it once on older 2009-10 data that I didn't train it on, it still outperformed "today's rule," 45.9% to 36.1%.
+
+However, all of this information is from survey data, where every person provided only one urine sample. A more valid diagnosis requires that the result remains high on a second follow-up test, and for that group, a small group consisting of 92 people who have a second urine sample, my model and the rule did about the same. It also has not been tested on actual hospital records yet, which is the next planned step.
+
 
 ## Later checks
 - **Round 4 robustness checks** (`src/round4.py` → `results/res_round4.json`): model vs blood-pressure ranking among people without a hypertension diagnosis, a version with some labs masked, calibration by sex, equity confidence intervals and net benefit.
