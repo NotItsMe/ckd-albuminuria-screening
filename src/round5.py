@@ -21,7 +21,8 @@ for b in range(1000):
 ci=lambda v:[round(float(np.percentile(v,2.5)),4),round(float(np.percentile(v,97.5)),4)]
 O={}
 # (1) EHR model file
-m_ehr=fit_gb(EHR); m_ehr.booster_.save_model("model_ehr_16inputs.txt")  # copied to ../model/; pe=m_ehr.predict_proba(te[EHR])[:,1]
+m_ehr=fit_gb(EHR); m_ehr.booster_.save_model("model_ehr_16inputs.txt")  # copied to ../model/
+pe=m_ehr.predict_proba(te[EHR])[:,1]
 assert np.allclose(pe,te.p_gb_ehr.values)
 O["ehr_model"]=dict(inputs=EHR,auc=round(wauc(y,pe,w0),4),found=round(cap(w0,y,topk(pe,w0,(w0*h).sum()/w0.sum())),4))
 # (2) sex-matched volume: within each sex, test the same share as the rule tests in that sex
